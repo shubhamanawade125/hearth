@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#070C14">
+<title>Hearth — Community Health Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070C14;
+  --bg2: #0B1120;
+  --card: #0F1826;
+  --card2: #14202F;
+  --border: #1A2840;
+  --border2: #223050;
+  --accent: #00D4A8;
+  --accent2: #00A884;
+  --accent-glow: rgba(0,212,168,0.12);
+  --accent-dim: rgba(0,212,168,0.08);
+  --danger: #FF4757;
+  --danger-dim: rgba(255,71,87,0.1);
+  --warning: #FFA502;
+  --warning-dim: rgba(255,165,2,0.1);
+  --success: #2ED573;
+  --success-dim: rgba(46,213,115,0.1);
+  --purple: #7C3AED;
+  --text: #EEF2FF;
+  --text2: #8B97AB;
+  --text3: #3D4F65;
+  --r: 14px; --r-sm: 8px; --r-lg: 20px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;overflow:hidden}
+
+/* ===== SCREENS ===== */
+.screen{position:fixed;inset:0;display:none;flex-direction:column;background:var(--bg);overflow:hidden;animation:fadeIn .2s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== SCROLLABLE BODY ===== */
+.scroll-body{flex:1;overflow-y:auto;padding:16px 16px 80px;-webkit-overflow-scrolling:touch}
+.scroll-body::-webkit-scrollbar{width:0}
+
+/* ===== TOPBAR ===== */
+.topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;flex-shrink:0}
+.topbar-logo{display:flex;align-items:center;gap:10px;flex:1}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;color:#070C14;font-size:16px;flex-shrink:0}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--text)}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
+.back-btn{width:36px;height:36px;border-radius:var(--r-sm);background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:18px;flex-shrink:0;transition:.2s}
+.back-btn:active{background:var(--border)}
+
+/* ===== WATERMARK ===== */
+.watermark{background:var(--bg2);border-top:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:6px;flex-shrink:0;font-size:11px;color:var(--text3)}
+.watermark span{color:var(--accent);font-weight:600}
+
+/* ===== BUTTONS ===== */
+.btn{width:100%;padding:14px 20px;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:.2s;letter-spacing:.3px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#070C14}
+.btn-primary:active{transform:scale(.98);opacity:.9}
+.btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn-danger{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(255,71,87,.2)}
+.btn-sm{padding:8px 14px;font-size:12px;width:auto;border-radius:var(--r-sm)}
+.btn-icon{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#070C14;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,212,168,.3);transition:.2s;flex-shrink:0}
+.btn-icon:active{transform:scale(.95)}
+
+/* ===== INPUTS ===== */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.field input,.field select,.field textarea{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;transition:.2s;-webkit-appearance:none}
+.field select option{background:var(--card2)}
+.field textarea{resize:none;min-height:80px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);background:var(--card);box-shadow:0 0 0 3px var(--accent-glow)}
+.field input::placeholder,.field textarea::placeholder{color:var(--text3)}
+
+/* ===== CARDS ===== */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.card-sm{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px}
+
+/* ===== BADGES ===== */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.badge-success{background:var(--success-dim);color:var(--success)}
+.badge-warning{background:var(--warning-dim);color:var(--warning)}
+.badge-danger{background:var(--danger-dim);color:var(--danger)}
+.badge-accent{background:var(--accent-dim);color:var(--accent)}
+
+/* ===== CHECKBOXES ===== */
+.check-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.check-pill{padding:7px 12px;border-radius:20px;background:var(--card2);border:1.5px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:.2s;user-select:none}
+.check-pill.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+
+/* ===== STATS ===== */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
+.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:11px;color:var(--text2);margin-top:4px;font-weight:500}
+.stat-icon{position:absolute;top:12px;right:12px;font-size:20px;opacity:.4}
+
+/* ===== RECORD CARDS ===== */
+.record-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;transition:.2s;active:background:var(--card2)}
+.record-card:active{background:var(--card2);transform:scale(.99)}
+.record-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.record-meta{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.record-footer{display:flex;align-items:center;justify-content:space-between}
+
+/* ===== FORM PROGRESS ===== */
+.form-progress{padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.progress-track{height:4px;background:var(--border);border-radius:2px;margin-bottom:8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:.3s ease}
+.progress-steps{display:flex;justify-content:space-between}
+.progress-step{font-size:10px;color:var(--text3);font-weight:600;transition:.2s}
+.progress-step.done{color:var(--accent)}
+.progress-step.current{color:var(--text)}
+
+/* ===== SECTION HEADERS ===== */
+.section-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.section-hd-icon{width:34px;height:34px;border-radius:var(--r-sm);background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.section-hd h3{font-size:15px;font-weight:700;color:var(--text)}
+.section-hd p{font-size:12px;color:var(--text2);margin-top:2px}
+
+/* ===== MEMBER TABLE ===== */
+.member-row{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px;margin-bottom:8px;position:relative}
+.member-row .remove-btn{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;background:var(--danger-dim);border:none;color:var(--danger);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.member-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.member-fields .field{margin-bottom:0}
+.member-fields .field label{font-size:10px}
+.member-fields .field input,.member-fields .field select{padding:8px 10px;font-size:12px;border-radius:6px}
+
+/* ===== DRUG ROW ===== */
+.drug-row{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px;margin-bottom:8px;position:relative}
+.drug-row .remove-btn{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;background:var(--danger-dim);border:none;color:var(--danger);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.drug-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.drug-fields .field{margin-bottom:0}
+.drug-fields .field label{font-size:10px}
+.drug-fields .field input,.drug-fields .field select{padding:8px 10px;font-size:12px;border-radius:6px}
+
+/* ===== TOPIC GRID ===== */
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.topic-btn{padding:10px;border-radius:var(--r-sm);background:var(--card2);border:1.5px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:.2s;text-align:center;line-height:1.3}
+.topic-btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+
+/* ===== CONSENT OPTIONS ===== */
+.consent-options{display:flex;gap:8px;margin-top:8px}
+.consent-opt{flex:1;padding:12px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:var(--card2);text-align:center;cursor:pointer;transition:.2s}
+.consent-opt .co-icon{font-size:20px;margin-bottom:4px}
+.consent-opt .co-label{font-size:11px;font-weight:700;color:var(--text2)}
+.consent-opt.active-green{border-color:var(--success);background:var(--success-dim)}
+.consent-opt.active-green .co-label{color:var(--success)}
+.consent-opt.active-orange{border-color:var(--warning);background:var(--warning-dim)}
+.consent-opt.active-orange .co-label{color:var(--warning)}
+.consent-opt.active-red{border-color:var(--danger);background:var(--danger-dim)}
+.consent-opt.active-red .co-label{color:var(--danger)}
+
+/* ===== RECORD VIEW ===== */
+.consent-banner{padding:12px 16px;margin:-16px -16px 16px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+.rv-section{margin-bottom:16px}
+.rv-section h4{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.rv-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border)}
+.rv-row:last-child{border-bottom:none}
+.rv-label{font-size:12px;color:var(--text2);flex:1}
+.rv-val{font-size:13px;font-weight:600;color:var(--text);text-align:right;max-width:60%}
+.rv-full{padding:8px 0;border-bottom:1px solid var(--border)}
+.rv-full:last-child{border-bottom:none}
+.rv-full .rv-label{margin-bottom:4px}
+.rv-full .rv-val{text-align:left;max-width:100%}
+
+/* ===== SEARCH ===== */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap input{width:100%;padding:11px 14px 11px 38px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:.2s}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px}
+
+/* ===== TABS ===== */
+.tab-bar{display:flex;background:var(--card2);border-radius:var(--r-sm);padding:3px;margin-bottom:16px}
+.tab{flex:1;padding:8px;text-align:center;border-radius:6px;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;transition:.2s}
+.tab.active{background:var(--card);color:var(--accent)}
+
+/* ===== FAB ===== */
+.fab{position:fixed;bottom:70px;right:20px;z-index:100}
+
+/* ===== LOADING ===== */
+#screen-loading{align-items:center;justify-content:center;gap:12px}
+.loader{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== ADMIN SETUP / AUTH ===== */
+.auth-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 20px;overflow-y:auto}
+.auth-brand{text-align:center;margin-bottom:32px}
+.auth-brand .logo-icon{width:56px;height:56px;border-radius:16px;margin:0 auto 12px;font-size:24px}
+.auth-brand h1{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--text)}
+.auth-brand p{font-size:13px;color:var(--text2);margin-top:4px}
+.auth-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px}
+.auth-note{font-size:11px;color:var(--text3);text-align:center;margin-top:12px;line-height:1.5}
+
+/* ===== USER LIST ===== */
+.user-item{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.user-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--accent);flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-meta{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* ===== ACTIVITY LOG ===== */
+.log-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:4px;flex-shrink:0}
+.log-content{flex:1;min-width:0}
+.log-action{font-size:12px;font-weight:600;color:var(--text)}
+.log-meta{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* ===== BMI BAR ===== */
+.bmi-display{background:var(--card2);border-radius:var(--r-sm);padding:12px;margin-top:8px;display:none}
+.bmi-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+.bmi-class{font-size:12px;font-weight:600;margin-left:8px}
+.bmi-bar{height:6px;border-radius:3px;background:var(--border);margin:8px 0;position:relative;overflow:hidden}
+.bmi-fill{height:100%;border-radius:3px;transition:.5s}
+
+/* ===== EMPTY STATE ===== */
+.empty{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.5}
+.empty-text{font-size:14px;font-weight:500}
+
+/* ===== DIVIDER ===== */
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+/* ===== TOGGLE ===== */
+.toggle-link{text-align:center;margin-top:14px;font-size:12px;color:var(--text2)}
+.toggle-link span{color:var(--accent);font-weight:700;cursor:pointer}
+
+/* ===== INLINE ROW ===== */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="screen active" id="screen-loading">
+  <div class="loader"></div>
+  <p style="color:var(--text2);font-size:13px;font-weight:500">Loading Hearth...</p>
+</div>
+
+<!-- ADMIN SETUP -->
+<div class="screen" id="screen-setup">
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <div class="logo-icon">H</div>
+      <h1>Welcome to Hearth</h1>
+      <p>First-time setup — Create your admin account</p>
+    </div>
+    <div class="auth-box">
+      <div class="field">
+        <label>Your Full Name</label>
+        <input type="text" id="setup-name" placeholder="e.g. Shubham Anawade">
+      </div>
+      <div class="field">
+        <label>Your Roll Number</label>
+        <input type="text" id="setup-roll" placeholder="Your college roll number">
+      </div>
+      <div class="field">
+        <label>Admin PIN (4+ digits)</label>
+        <input type="password" id="setup-pin" placeholder="Choose a secret PIN" inputmode="numeric">
+      </div>
+      <button class="btn btn-primary" onclick="createAdmin()">Create Admin Account</button>
+      <p id="setup-err" style="color:var(--danger);font-size:12px;text-align:center;margin-top:10px;display:none"></p>
+    </div>
+    <p class="auth-note">This screen appears only once. Your roll number + PIN is your admin login forever.</p>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="screen" id="screen-login">
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <div class="logo-icon">H</div>
+      <h1>Hearth</h1>
+      <p>Community Health Platform</p>
+    </div>
+    <div class="tab-bar" style="margin-bottom:16px">
+      <div class="tab active" id="tab-student" onclick="switchLoginTab('student')">Student</div>
+      <div class="tab" id="tab-admin" onclick="switchLoginTab('admin')">Admin</div>
+    </div>
+    <!-- Student panel -->
+    <div id="student-panel">
+      <div class="tab-bar" style="margin-bottom:16px">
+        <div class="tab active" id="stab-login" onclick="switchStudentTab('login')">Login</div>
+        <div class="tab" id="stab-register" onclick="switchStudentTab('register')">Register</div>
+      </div>
+      <div class="auth-box">
+        <div id="student-login-form">
+          <div class="field"><label>Full Name</label><input type="text" id="sl-name" placeholder="Your full name"></div>
+          <div class="field"><label>Password</label><input type="password" id="sl-pass" placeholder="Your password"></div>
+          <button class="btn btn-primary" onclick="loginStudent()">Login</button>
+        </div>
+        <div id="student-register-form" style="display:none">
+          <div class="field"><label>Full Name</label><input type="text" id="sr-name" placeholder="Your full name"></div>
+          <div class="field"><label>Roll Number</label><input type="text" id="sr-roll" placeholder="Your college roll number"></div>
+          <div class="field"><label>Password</label><input type="password" id="sr-pass" placeholder="Create a password"></div>
+          <div class="field"><label>Confirm Password</label><input type="password" id="sr-pass2" placeholder="Confirm password"></div>
+          <button class="btn btn-primary" onclick="registerStudent()">Create Account</button>
+        </div>
+        <p id="login-err" style="color:var(--danger);font-size:12px;text-align:center;margin-top:10px;display:none"></p>
+      </div>
+    </div>
+    <!-- Admin panel -->
+    <div id="admin-panel" style="display:none">
+      <div class="auth-box">
+        <div class="field"><label>Roll Number</label><input type="text" id="al-roll" placeholder="Your admin roll number"></div>
+        <div class="field"><label>Admin PIN</label><input type="password" id="al-pin" placeholder="Your secret PIN" inputmode="numeric"></div>
+        <button class="btn btn-primary" onclick="loginAdmin()">Admin Login</button>
+        <p id="admin-err" style="color:var(--danger);font-size:12px;text-align:center;margin-top:10px;display:none"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="screen-dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-icon">H</div>
+      <div>
+        <div class="logo-text">Hearth</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:-2px" id="dash-welcome">Welcome</div>
+      </div>
+    </div>
+    <button id="admin-btn" onclick="showAdminPanel()" style="display:none;background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent);padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer">⚙ Admin</button>
+    <button onclick="logout()" style="background:var(--card2);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;margin-left:6px">Logout</button>
+  </div>
+  <div class="scroll-body">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card"><div class="stat-val" id="stat-families">0</div><div class="stat-label">Families Surveyed</div><div class="stat-icon">🏠</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-consented">0</div><div class="stat-label">Consented</div><div class="stat-icon">✅</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-users">0</div><div class="stat-label">Active Students</div><div class="stat-icon">👥</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-edu">0</div><div class="stat-label">Health Ed Given</div><div class="stat-icon">📚</div></div>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search by family name, area, student..." oninput="filterRecords()">
+    </div>
+    <div id="records-list">
+      <div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No records yet.<br>Tap + to add the first family.</div></div>
+    </div>
+  </div>
+  <div class="fab"><button class="btn-icon" onclick="openForm()">+</button></div>
+  <div class="watermark">🔒 <span id="wm-dash"></span> · Hearth Community Health Platform</div>
+</div>
+
+<!-- FORM -->
+<div class="screen" id="screen-form">
+  <div class="topbar">
+    <button class="back-btn" onclick="confirmLeaveForm()">←</button>
+    <span class="topbar-title" id="form-title">New Survey</span>
+    <button onclick="saveFormAsDraft()" style="background:transparent;border:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer">Save</button>
+  </div>
+  <div class="form-progress">
+    <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:14%"></div></div>
+    <div class="progress-steps">
+      <span class="progress-step current" id="ps0">Consent</span>
+      <span class="progress-step" id="ps1">Family</span>
+      <span class="progress-step" id="ps2">Vitals</span>
+      <span class="progress-step" id="ps3">History</span>
+      <span class="progress-step" id="ps4">Diet</span>
+      <span class="progress-step" id="ps5">Drugs</span>
+      <span class="progress-step" id="ps6">Edu</span>
+    </div>
+  </div>
+  <div class="scroll-body" id="form-body"></div>
+  <div style="padding:12px 16px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:10px">
+    <button class="btn btn-secondary" id="prev-btn" onclick="prevStep()" style="display:none">← Back</button>
+    <button class="btn btn-primary" id="next-btn" onclick="nextStep()">Continue →</button>
+  </div>
+  <div class="watermark">🔒 <span id="wm-form"></span> · Hearth Community Health Platform</div>
+</div>
+
+<!-- RECORD VIEW -->
+<div class="screen" id="screen-record">
+  <div class="topbar">
+    <button class="back-btn" onclick="showScreen('dashboard');loadDashboard()">←</button>
+    <span class="topbar-title" id="rv-title">Family Record</span>
+    <div style="display:flex;gap:8px">
+      <button id="rv-delete-btn" onclick="deleteCurrentRecord()" style="display:none;background:var(--danger-dim);border:1px solid rgba(255,71,87,.2);color:var(--danger);padding:6px 10px;border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer">Delete</button>
+    </div>
+  </div>
+  <div class="scroll-body" id="record-view-body"></div>
+  <div class="watermark">🔒 <span id="wm-record"></span> · Hearth Community Health Platform</div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="screen" id="screen-admin">
+  <div class="topbar">
+    <button class="back-btn" onclick="showScreen('dashboard')">←</button>
+    <span class="topbar-title">Admin Panel</span>
+  </div>
+  <div class="scroll-body">
+    <div class="tab-bar">
+      <div class="tab active" id="atab-users" onclick="switchAdminTab('users')">Users</div>
+      <div class="tab" id="atab-log" onclick="switchAdminTab('log')">Activity Log</div>
+    </div>
+    <div id="admin-users-content"></div>
+    <div id="admin-log-content" style="display:none"></div>
+  </div>
+  <div class="watermark">🔒 <span id="wm-admin"></span> · Hearth Community Health Platform</div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script>
+// ===== FIREBASE CONFIG =====
+const firebaseConfig = {
+  apiKey: "AIzaSyA6IbJsU6MKoLxGa2OATB3AnjI6teljt98",
+  authDomain: "hearth-ea42e.firebaseapp.com",
+  projectId: "hearth-ea42e",
+  storageBucket: "hearth-ea42e.firebasestorage.app",
+  messagingSenderId: "100109736220",
+  appId: "1:100109736220:web:5c38f32b536b512ff902d9"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ===== STATE =====
+let currentUser = null;
+let allRecords = [];
+let currentRecord = null;
+let formStep = 0;
+let formData = {};
+let editingRecordId = null;
+const TOTAL_STEPS = 7;
+
+// ===== UTILITIES =====
+function simpleHash(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return hash.toString(36);
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  updateWatermarks();
+}
+
+function updateWatermarks() {
+  if (!currentUser) return;
+  const txt = currentUser.name + ' · ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
+  ['dash','form','record','admin'].forEach(id => {
+    const el = document.getElementById('wm-' + id);
+    if (el) el.textContent = txt;
+  });
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+function hideErr(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+}
+
+function logActivity(action, details) {
+  if (!currentUser) return;
+  db.collection('hearth_activity').add({
+    action, details,
+    userName: currentUser.name,
+    userRole: currentUser.role,
+    rollNumber: currentUser.rollNumber || '',
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(()=>{});
+}
+
+// ===== INIT =====
+async function init() {
+  // Restore session
+  try {
+    const saved = sessionStorage.getItem('hearth_user');
+    if (saved) currentUser = JSON.parse(saved);
+  } catch(e) {}
+
+  try {
+    const adminDoc = await db.collection('hearth_config').doc('admin').get();
+    if (!adminDoc.exists) {
+      showScreen('setup');
+    } else if (currentUser) {
+      showScreen('dashboard');
+      loadDashboard();
+    } else {
+      showScreen('login');
+    }
+  } catch(e) {
+    showScreen('setup');
+  }
+}
+
+// ===== ADMIN SETUP =====
+async function createAdmin() {
+  const name = document.getElementById('setup-name').value.trim();
+  const roll = document.getElementById('setup-roll').value.trim();
+  const pin = document.getElementById('setup-pin').value.trim();
+  if (!name || !roll || !pin) { showErr('setup-err','Please fill all fields'); return; }
+  if (pin.length < 4) { showErr('setup-err','PIN must be at least 4 digits'); return; }
+  hideErr('setup-err');
+  try {
+    await db.collection('hearth_config').doc('admin').set({
+      name, rollNumber: roll, pin: simpleHash(pin), createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    currentUser = { name, rollNumber: roll, role: 'admin' };
+    sessionStorage.setItem('hearth_user', JSON.stringify(currentUser));
+    logActivity('Admin Setup', 'Admin account created');
+    showScreen('dashboard');
+    loadDashboard();
+  } catch(e) { showErr('setup-err','Error: ' + e.message); }
+}
+
+// ===== LOGIN TABS =====
+function switchLoginTab(tab) {
+  document.getElementById('tab-student').classList.toggle('active', tab === 'student');
+  document.getElementById('tab-admin').classList.toggle('active', tab === 'admin');
+  document.getElementById('student-panel').style.display = tab === 'student' ? 'block' : 'none';
+  document.getElementById('admin-panel').style.display = tab === 'admin' ? 'block' : 'none';
+}
+
+function switchStudentTab(tab) {
+  document.getElementById('stab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('stab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('student-login-form').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('student-register-form').style.display = tab === 'register' ? 'block' : 'none';
+  hideErr('login-err');
+}
+
+// ===== STUDENT LOGIN =====
+async function loginStudent() {
+  const name = document.getElementById('sl-name').value.trim();
+  const pass = document.getElementById('sl-pass').value.trim();
+  if (!name || !pass) { showErr('login-err','Enter name and password'); return; }
+  hideErr('login-err');
+  try {
+    const snap = await db.collection('hearth_users').where('name','==',name).get();
+    if (snap.empty) { showErr('login-err','No account found. Please register first.'); return; }
+    const doc = snap.docs[0];
+    if (doc.data().password !== simpleHash(pass)) { showErr('login-err','Wrong password'); return; }
+    await db.collection('hearth_users').doc(doc.id).update({ lastLogin: firebase.firestore.FieldValue.serverTimestamp() });
+    currentUser = { id: doc.id, name, rollNumber: doc.data().rollNumber, role: 'student' };
+    sessionStorage.setItem('hearth_user', JSON.stringify(currentUser));
+    logActivity('Login', 'Student logged in');
+    showScreen('dashboard'); loadDashboard();
+  } catch(e) { showErr('login-err','Error: ' + e.message); }
+}
+
+// ===== STUDENT REGISTER =====
+async function registerStudent() {
+  const name = document.getElementById('sr-name').value.trim();
+  const roll = document.getElementById('sr-roll').value.trim();
+  const pass = document.getElementById('sr-pass').value.trim();
+  const pass2 = document.getElementById('sr-pass2').value.trim();
+  if (!name || !roll || !pass || !pass2) { showErr('login-err','Fill all fields'); return; }
+  if (pass !== pass2) { showErr('login-err','Passwords do not match'); return; }
+  if (pass.length < 4) { showErr('login-err','Password must be at least 4 characters'); return; }
+  hideErr('login-err');
+  try {
+    const existing = await db.collection('hearth_users').where('name','==',name).get();
+    if (!existing.empty) { showErr('login-err','Name already registered. Please login.'); return; }
+    const ref = await db.collection('hearth_users').add({
+      name, rollNumber: roll, password: simpleHash(pass), role: 'student',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    currentUser = { id: ref.id, name, rollNumber: roll, role: 'student' };
+    sessionStorage.setItem('hearth_user', JSON.stringify(currentUser));
+    logActivity('Register', 'New student registered');
+    showScreen('dashboard'); loadDashboard();
+  } catch(e) { showErr('login-err','Error: ' + e.message); }
+}
+
+// ===== ADMIN LOGIN =====
+async function loginAdmin() {
+  const roll = document.getElementById('al-roll').value.trim();
+  const pin = document.getElementById('al-pin').value.trim();
+  if (!roll || !pin) { showErr('admin-err','Enter roll number and PIN'); return; }
+  hideErr('admin-err');
+  try {
+    const adminDoc = await db.collection('hearth_config').doc('admin').get();
+    const data = adminDoc.data();
+    if (data.rollNumber !== roll || data.pin !== simpleHash(pin)) {
+      showErr('admin-err','Wrong credentials'); return;
+    }
+    currentUser = { name: data.name, rollNumber: roll, role: 'admin' };
+    sessionStorage.setItem('hearth_user', JSON.stringify(currentUser));
+    logActivity('Admin Login', 'Admin logged in');
+    showScreen('dashboard'); loadDashboard();
+  } catch(e) { showErr('admin-err','Error: ' + e.message); }
+}
+
+// ===== LOGOUT =====
+function logout() {
+  logActivity('Logout', 'User logged out');
+  currentUser = null;
+  sessionStorage.removeItem('hearth_user');
+  showScreen('login');
+}
+
+// ===== DASHBOARD =====
+async function loadDashboard() {
+  document.getElementById('dash-welcome').textContent = 'Hi, ' + (currentUser?.name?.split(' ')[0] || '') + ' 👋';
+  document.getElementById('admin-btn').style.display = currentUser?.role === 'admin' ? 'block' : 'none';
+  updateWatermarks();
+  try {
+    const snap = await db.collection('hearth_records').orderBy('createdAt','desc').get();
+    allRecords = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    renderRecords(allRecords);
+    // Stats
+    document.getElementById('stat-families').textContent = allRecords.length;
+    document.getElementById('stat-consented').textContent = allRecords.filter(r => r.consent?.status === 'comfortable').length;
+    // Count unique users
+    const userSnap = await db.collection('hearth_users').get();
+    document.getElementById('stat-users').textContent = userSnap.size;
+    document.getElementById('stat-edu').textContent = allRecords.filter(r => r.healthEdu?.topics?.length > 0).length;
+  } catch(e) { console.error(e); }
+}
+
+function renderRecords(records) {
+  const list = document.getElementById('records-list');
+  if (records.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No records yet.<br>Tap + to add the first family.</div></div>';
+    return;
+  }
+  list.innerHTML = records.map(r => {
+    const cs = r.consent?.status;
+    const badgeClass = cs === 'comfortable' ? 'badge-success' : cs === 'hesitant' ? 'badge-warning' : cs === 'refused' ? 'badge-danger' : 'badge-accent';
+    const badgeTxt = cs === 'comfortable' ? '✓ Consented' : cs === 'hesitant' ? '⚠ Hesitant' : cs === 'refused' ? '✗ Refused' : '— Pending';
+    return `<div class="record-card" onclick="viewRecord('${r.id}')">
+      <div class="record-name">${r.family?.headName || 'Unknown Family'}</div>
+      <div class="record-meta">
+        <span>📍 ${r.family?.address || '—'}</span>
+        <span>👤 ${r.collectedBy || '—'}</span>
+        <span>🗓 ${fmtDate(r.createdAt)}</span>
+      </div>
+      <div class="record-footer">
+        <span class="badge ${badgeClass}">${badgeTxt}</span>
+        ${r.family?.totalMembers ? `<span style="font-size:11px;color:var(--text2)">${r.family.totalMembers} members</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterRecords() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  if (!q) { renderRecords(allRecords); return; }
+  const filtered = allRecords.filter(r =>
+    (r.family?.headName||'').toLowerCase().includes(q) ||
+    (r.family?.address||'').toLowerCase().includes(q) ||
+    (r.collectedBy||'').toLowerCase().includes(q)
+  );
+  renderRecords(filtered);
+}
+
+// ===== FORM =====
+function openForm(id) {
+  editingRecordId = id || null;
+  formStep = 0;
+  formData = editingRecordId ? (allRecords.find(r => r.id === editingRecordId) || {}) : {};
+  document.getElementById('form-title').textContent = editingRecordId ? 'Edit Record' : 'New Survey';
+  renderFormStep();
+  showScreen('form');
+}
+
+function updateProgress() {
+  const pct = Math.round(((formStep + 1) / TOTAL_STEPS) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const el = document.getElementById('ps' + i);
+    if (el) {
+      el.className = 'progress-step' + (i < formStep ? ' done' : i === formStep ? ' current' : '');
+    }
+  }
+  document.getElementById('prev-btn').style.display = formStep > 0 ? 'flex' : 'none';
+  document.getElementById('next-btn').textContent = formStep === TOTAL_STEPS - 1 ? '✓ Submit' : 'Continue →';
+}
+
+function prevStep() { if (formStep > 0) { formStep--; renderFormStep(); } }
+
+async function nextStep() {
+  collectCurrentStep();
+  if (formStep < TOTAL_STEPS - 1) {
+    formStep++;
+    renderFormStep();
+  } else {
+    await submitForm();
+  }
+}
+
+function saveFormAsDraft() {
+  collectCurrentStep();
+  alert('Progress saved locally. Tap Submit on last step to save to database.');
+}
+
+function confirmLeaveForm() {
+  if (confirm('Leave form? Progress will be lost.')) {
+    showScreen('dashboard');
+  }
+}
+
+function collectCurrentStep() {
+  switch (formStep) {
+    case 0: collectConsent(); break;
+    case 1: collectFamily(); break;
+    case 2: collectVitals(); break;
+    case 3: collectHistory(); break;
+    case 4: collectDiet(); break;
+    case 5: collectDrugs(); break;
+    case 6: collectHealthEdu(); break;
+  }
+}
+
+function renderFormStep() {
+  updateProgress();
+  const body = document.getElementById('form-body');
+  switch (formStep) {
+    case 0: body.innerHTML = renderConsentStep(); initConsentStep(); break;
+    case 1: body.innerHTML = renderFamilyStep(); initFamilyStep(); break;
+    case 2: body.innerHTML = renderVitalsStep(); initVitalsStep(); break;
+    case 3: body.innerHTML = renderHistoryStep(); break;
+    case 4: body.innerHTML = renderDietStep(); initDietStep(); break;
+    case 5: body.innerHTML = renderDrugsStep(); initDrugsStep(); break;
+    case 6: body.innerHTML = renderHealthEduStep(); initHealthEduStep(); break;
+  }
+  body.scrollTop = 0;
+}
+
+// ===== STEP 0: CONSENT =====
+function renderConsentStep() {
+  return `<div class="section-hd"><div class="section-hd-icon">🤝</div><div><h3>Family Consent</h3><p>Read to the family before proceeding</p></div></div>
+  <div class="card" style="background:var(--accent-dim);border-color:var(--accent)">
+    <p style="font-size:12px;color:var(--accent);line-height:1.6;font-weight:500">
+      "We are nursing students from [your college] conducting a community health survey. We would like to collect basic health information about your family to help provide better care. All information will be kept confidential and used only for educational purposes. Your participation is completely voluntary."
+    </p>
+  </div>
+  <div class="field"><label>Family Response</label>
+    <div class="consent-options">
+      <div class="consent-opt ${(formData.consent?.status==='comfortable'?'active-green':'')}" onclick="selectConsent('comfortable',this)" data-val="comfortable"><div class="co-icon">😊</div><div class="co-label">Comfortable</div></div>
+      <div class="consent-opt ${(formData.consent?.status==='hesitant'?'active-orange':'')}" onclick="selectConsent('hesitant',this)" data-val="hesitant"><div class="co-icon">🤔</div><div class="co-label">Hesitant</div></div>
+      <div class="consent-opt ${(formData.consent?.status==='refused'?'active-red':'')}" onclick="selectConsent('refused',this)" data-val="refused"><div class="co-icon">✋</div><div class="co-label">Refused</div></div>
+    </div>
+  </div>
+  <div class="field"><label>Consent Given By</label><input type="text" id="c-giver" placeholder="e.g. Head of family, Spouse" value="${formData.consent?.givenBy||''}"></div>
+  <div id="c-extra" style="display:${['hesitant','refused'].includes(formData.consent?.status)?'block':'none'}">
+    <div class="field"><label>Reason for Hesitation / Refusal</label><textarea id="c-reason" placeholder="Note down the reason...">${formData.consent?.reason||''}</textarea></div>
+    <div class="field"><label>Best Time to Revisit</label><input type="text" id="c-revisit" placeholder="e.g. Evening after 6 PM" value="${formData.consent?.revisit||''}"></div>
+  </div>
+  <div class="field">
+    <label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:13px;cursor:pointer">
+      <input type="checkbox" id="c-verbal" ${formData.consent?.verbalGiven?'checked':''} style="width:16px;height:16px;accent-color:var(--accent)">
+      Verbal consent confirmed
+    </label>
+  </div>`;
+}
+
+function initConsentStep() {}
+
+function selectConsent(val, el) {
+  document.querySelectorAll('.consent-opt').forEach(o => o.className = 'consent-opt');
+  const clsMap = {comfortable:'active-green',hesitant:'active-orange',refused:'active-red'};
+  el.className = 'consent-opt ' + clsMap[val];
+  el.dataset.selected = val;
+  document.getElementById('c-extra').style.display = ['hesitant','refused'].includes(val) ? 'block' : 'none';
+  if (!formData.consent) formData.consent = {};
+  formData.consent.status = val;
+}
+
+function collectConsent() {
+  const selected = document.querySelector('.consent-opt[data-selected]');
+  formData.consent = {
+    status: selected?.dataset?.selected || formData.consent?.status || 'pending',
+    givenBy: document.getElementById('c-giver')?.value || '',
+    reason: document.getElementById('c-reason')?.value || '',
+    revisit: document.getElementById('c-revisit')?.value || '',
+    verbalGiven: document.getElementById('c-verbal')?.checked || false
+  };
+}
+
+// ===== STEP 1: FAMILY =====
+let members = [];
+function renderFamilyStep() {
+  members = formData.family?.members || [];
+  return `<div class="section-hd"><div class="section-hd-icon">🏠</div><div><h3>Family Information</h3><p>Head of family and all members</p></div></div>
+  <div class="row2">
+    <div class="field"><label>Head of Family Name</label><input type="text" id="f-head" placeholder="Full name" value="${formData.family?.headName||''}"></div>
+    <div class="field"><label>Total Members</label><input type="number" id="f-total" placeholder="Count" value="${formData.family?.totalMembers||''}" inputmode="numeric"></div>
+  </div>
+  <div class="field"><label>Full Address</label><textarea id="f-addr" placeholder="House no, street, area...">${formData.family?.address||''}</textarea></div>
+  <div class="row2">
+    <div class="field"><label>Ward / Area</label><input type="text" id="f-ward" placeholder="Ward number / area" value="${formData.family?.ward||''}"></div>
+    <div class="field"><label>Contact (optional)</label><input type="tel" id="f-contact" placeholder="Phone number" value="${formData.family?.contact||''}" inputmode="tel"></div>
+  </div>
+  <div class="divider"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <span style="font-size:13px;font-weight:700;color:var(--text)">Family Members</span>
+    <button class="btn btn-secondary btn-sm" onclick="addMember()">+ Add Member</button>
+  </div>
+  <div id="members-list"></div>`;
+}
+
+function initFamilyStep() { renderMembersList(); }
+
+function renderMembersList() {
+  const list = document.getElementById('members-list');
+  if (!list) return;
+  if (members.length === 0) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--text3);text-align:center;padding:12px">No members added yet</p>';
+    return;
+  }
+  list.innerHTML = members.map((m, i) => `
+    <div class="member-row">
+      <button class="remove-btn" onclick="removeMember(${i})">✕</button>
+      <div class="member-fields">
+        <div class="field"><label>Name</label><input type="text" value="${m.name||''}" onchange="updateMember(${i},'name',this.value)" placeholder="Name"></div>
+        <div class="field"><label>Age</label><input type="number" value="${m.age||''}" onchange="updateMember(${i},'age',this.value)" placeholder="Age" inputmode="numeric"></div>
+        <div class="field"><label>Gender</label><select onchange="updateMember(${i},'gender',this.value)"><option ${m.gender==='Male'?'selected':''}>Male</option><option ${m.gender==='Female'?'selected':''}>Female</option><option ${m.gender==='Other'?'selected':''}>Other</option></select></div>
+        <div class="field"><label>Relation</label><input type="text" value="${m.relation||''}" onchange="updateMember(${i},'relation',this.value)" placeholder="e.g. Son"></div>
+        <div class="field" style="grid-column:1/-1"><label>Occupation</label><input type="text" value="${m.occupation||''}" onchange="updateMember(${i},'occupation',this.value)" placeholder="Occupation"></div>
+      </div>
+    </div>`).join('');
+}
+
+function addMember() { members.push({name:'',age:'',gender:'Male',relation:'',occupation:''}); renderMembersList(); }
+function removeMember(i) { members.splice(i,1); renderMembersList(); }
+function updateMember(i, key, val) { if (members[i]) members[i][key] = val; }
+
+function collectFamily() {
+  formData.family = {
+    headName: document.getElementById('f-head')?.value || '',
+    totalMembers: document.getElementById('f-total')?.value || '',
+    address: document.getElementById('f-addr')?.value || '',
+    ward: document.getElementById('f-ward')?.value || '',
+    contact: document.getElementById('f-contact')?.value || '',
+    members: members
+  };
+}
+
+// ===== STEP 2: VITALS =====
+function renderVitalsStep() {
+  const v = formData.vitals || {};
+  return `<div class="section-hd"><div class="section-hd-icon">🩺</div><div><h3>Vital Signs</h3><p>Physical examination findings</p></div></div>
+  <div style="background:var(--card2);border-radius:var(--r);padding:14px;margin-bottom:16px">
+    <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Blood Pressure</div>
+    <div class="row2">
+      <div class="field" style="margin:0"><label>Systolic (mmHg)</label><input type="number" id="v-bps" value="${v.bpSystolic||''}" placeholder="120" inputmode="numeric"></div>
+      <div class="field" style="margin:0"><label>Diastolic (mmHg)</label><input type="number" id="v-bpd" value="${v.bpDiastolic||''}" placeholder="80" inputmode="numeric"></div>
+    </div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Pulse (bpm)</label><input type="number" id="v-pulse" value="${v.pulse||''}" placeholder="72" inputmode="numeric"></div>
+    <div class="field"><label>Temperature (°F)</label><input type="number" id="v-temp" value="${v.temperature||''}" placeholder="98.6" step="0.1" inputmode="decimal"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Weight (kg)</label><input type="number" id="v-wt" value="${v.weight||''}" placeholder="60" step="0.1" oninput="calcBMI()" inputmode="decimal"></div>
+    <div class="field"><label>Height (cm)</label><input type="number" id="v-ht" value="${v.height||''}" placeholder="165" oninput="calcBMI()" inputmode="numeric"></div>
+  </div>
+  <div id="bmi-display" class="bmi-display" style="display:${v.bmi?'block':'none'}">
+    <div style="display:flex;align-items:baseline">
+      <span class="bmi-val" id="bmi-val">${v.bmi||''}</span>
+      <span class="bmi-class" id="bmi-class" style="color:${getBMIColor(v.bmi)}">${getBMIClass(v.bmi)}</span>
+    </div>
+    <div class="bmi-bar"><div class="bmi-fill" id="bmi-fill" style="width:${getBMIPct(v.bmi)}%;background:${getBMIColor(v.bmi)}"></div></div>
+    <div style="font-size:10px;color:var(--text2)">BMI auto-calculated</div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>SpO₂ (%)</label><input type="number" id="v-spo2" value="${v.spO2||''}" placeholder="98" inputmode="numeric"></div>
+    <div class="field"><label>Resp. Rate (/min)</label><input type="number" id="v-rr" value="${v.respRate||''}" placeholder="18" inputmode="numeric"></div>
+  </div>`;
+}
+
+function initVitalsStep() { if(formData.vitals?.bmi) document.getElementById('bmi-display').style.display='block'; }
+
+function getBMIClass(bmi) {
+  if (!bmi) return '';
+  const b = parseFloat(bmi);
+  if (b < 18.5) return 'Underweight'; if (b < 25) return 'Normal'; if (b < 30) return 'Overweight'; return 'Obese';
+}
+function getBMIColor(bmi) {
+  if (!bmi) return 'var(--accent)';
+  const b = parseFloat(bmi);
+  if (b < 18.5) return 'var(--warning)'; if (b < 25) return 'var(--success)'; if (b < 30) return 'var(--warning)'; return 'var(--danger)';
+}
+function getBMIPct(bmi) {
+  if (!bmi) return 0;
+  return Math.min(100, Math.max(0, (parseFloat(bmi) - 10) / 30 * 100));
+}
+
+function calcBMI() {
+  const wt = parseFloat(document.getElementById('v-wt')?.value);
+  const ht = parseFloat(document.getElementById('v-ht')?.value);
+  if (wt > 0 && ht > 0) {
+    const bmi = (wt / Math.pow(ht/100, 2)).toFixed(1);
+    document.getElementById('bmi-display').style.display = 'block';
+    document.getElementById('bmi-val').textContent = bmi;
+    document.getElementById('bmi-class').textContent = getBMIClass(bmi);
+    document.getElementById('bmi-class').style.color = getBMIColor(bmi);
+    document.getElementById('bmi-fill').style.width = getBMIPct(bmi) + '%';
+    document.getElementById('bmi-fill').style.background = getBMIColor(bmi);
+  }
+}
+
+function collectVitals() {
+  const wt = document.getElementById('v-wt')?.value;
+  const ht = document.getElementById('v-ht')?.value;
+  let bmi = '';
+  if (wt && ht) bmi = (parseFloat(wt) / Math.pow(parseFloat(ht)/100,2)).toFixed(1);
+  formData.vitals = {
+    bpSystolic: document.getElementById('v-bps')?.value||'',
+    bpDiastolic: document.getElementById('v-bpd')?.value||'',
+    pulse: document.getElementById('v-pulse')?.value||'',
+    temperature: document.getElementById('v-temp')?.value||'',
+    weight: wt||'', height: ht||'', bmi,
+    spO2: document.getElementById('v-spo2')?.value||'',
+    respRate: document.getElementById('v-rr')?.value||''
+  };
+}
+
+// ===== STEP 3: HISTORY =====
+function renderHistoryStep() {
+  const h = formData.history || {};
+  const pastChecks = ['DM','HTN','TB','Asthma','Cardiac','Epilepsy'];
+  const famChecks = ['DM','HTN','TB','Cardiac','Cancer','Mental Illness'];
+  return `<div class="section-hd"><div class="section-hd-icon">📋</div><div><h3>Medical History</h3><p>Chief complaints and past history</p></div></div>
+  <div class="field"><label>Chief Complaint</label><textarea id="h-cc" placeholder="Main health complaint...">${h.chiefComplaint||''}</textarea></div>
+  <div class="row2">
+    <div class="field"><label>Duration</label><input type="text" id="h-dur" placeholder="e.g. 3 days" value="${h.duration||''}"></div>
+    <div class="field"><label>Onset</label><select id="h-onset"><option ${h.onset==='Sudden'?'selected':''}>Sudden</option><option ${h.onset==='Gradual'?'selected':''}>Gradual</option><option ${h.onset==='Chronic'?'selected':''}>Chronic</option></select></div>
+  </div>
+  <div class="field"><label>Aggravating Factors</label><input type="text" id="h-agg" placeholder="What makes it worse?" value="${h.aggravating||''}"></div>
+  <div class="field"><label>Relieving Factors</label><input type="text" id="h-rel" placeholder="What makes it better?" value="${h.relieving||''}"></div>
+  <div class="field"><label>Associated Symptoms</label><textarea id="h-assoc" placeholder="Other symptoms noticed...">${h.associated||''}</textarea></div>
+  <div class="field"><label>Previous Treatment</label><textarea id="h-prev" placeholder="Any previous treatments taken...">${h.previousTreatment||''}</textarea></div>
+  <div class="divider"></div>
+  <div class="section-hd"><div class="section-hd-icon">🕐</div><div><h3>Past History</h3></div></div>
+  <div class="field"><label>Previous Illnesses</label>
+    <div class="check-group" id="past-checks">
+      ${pastChecks.map(c => `<div class="check-pill ${(h.pastIllnesses||[]).includes(c)?'active':''}" onclick="toggleCheck(this,'past-checks')">${c}</div>`).join('')}
+    </div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Surgeries</label><input type="text" id="h-surg" placeholder="Any surgeries" value="${h.surgeries||''}"></div>
+    <div class="field"><label>Hospitalizations</label><input type="text" id="h-hosp" placeholder="Previous admissions" value="${h.hospitalizations||''}"></div>
+  </div>
+  <div class="field"><label>Allergies</label><input type="text" id="h-allergy" placeholder="Drug / food allergies" value="${h.allergies||''}"></div>
+  <div class="divider"></div>
+  <div class="section-hd"><div class="section-hd-icon">👨‍👩‍👧</div><div><h3>Family History</h3></div></div>
+  <div class="field"><label>Hereditary Conditions</label>
+    <div class="check-group" id="fam-checks">
+      ${famChecks.map(c => `<div class="check-pill ${(h.familyHistory||[]).includes(c)?'active':''}" onclick="toggleCheck(this,'fam-checks')">${c}</div>`).join('')}
+    </div>
+  </div>
+  <div class="field"><label>Family History Details</label><textarea id="h-famdet" placeholder="Additional notes...">${h.familyHistoryDetails||''}</textarea></div>`;
+}
+
+function toggleCheck(el) { el.classList.toggle('active'); }
+
+function collectHistory() {
+  const getChecked = (groupId) => [...document.querySelectorAll(`#${groupId} .check-pill.active`)].map(e => e.textContent);
+  formData.history = {
+    chiefComplaint: document.getElementById('h-cc')?.value||'',
+    duration: document.getElementById('h-dur')?.value||'',
+    onset: document.getElementById('h-onset')?.value||'',
+    aggravating: document.getElementById('h-agg')?.value||'',
+    relieving: document.getElementById('h-rel')?.value||'',
+    associated: document.getElementById('h-assoc')?.value||'',
+    previousTreatment: document.getElementById('h-prev')?.value||'',
+    pastIllnesses: getChecked('past-checks'),
+    surgeries: document.getElementById('h-surg')?.value||'',
+    hospitalizations: document.getElementById('h-hosp')?.value||'',
+    allergies: document.getElementById('h-allergy')?.value||'',
+    familyHistory: getChecked('fam-checks'),
+    familyHistoryDetails: document.getElementById('h-famdet')?.value||''
+  };
+}
+
+// ===== STEP 4: DIET =====
+function renderDietStep() {
+  const d = formData.diet || {};
+  return `<div class="section-hd"><div class="section-hd-icon">🥗</div><div><h3>Diet & Lifestyle</h3><p>Daily habits and nutrition</p></div></div>
+  <div class="row2">
+    <div class="field"><label>Diet Type</label><select id="d-type"><option ${d.type==='Vegetarian'?'selected':''}>Vegetarian</option><option ${d.type==='Non-Vegetarian'?'selected':''}>Non-Vegetarian</option><option ${d.type==='Eggetarian'?'selected':''}>Eggetarian</option></select></div>
+    <div class="field"><label>Meals / Day</label><select id="d-meals"><option ${d.meals==='1'?'selected':''}>1</option><option ${d.meals==='2'?'selected':''}>2</option><option ${d.meals==='3'?'selected':'selected'}>3</option><option ${d.meals==='4'?'selected':''}>4</option><option ${d.meals==='5+'?'selected':''}>5+</option></select></div>
+  </div>
+  <div class="field"><label>Water Intake</label><select id="d-water"><option ${d.water==='<1L'?'selected':''}>Less than 1L</option><option ${d.water==='1-2L'?'selected':'selected'}>1–2 Litres</option><option ${d.water==='2-3L'?'selected':''}>2–3 Litres</option><option ${d.water==='>3L'?'selected':''}>More than 3L</option></select></div>
+  <div class="field"><label>Breakfast</label><input type="text" id="d-bfast" placeholder="Typical breakfast..." value="${d.breakfast||''}"></div>
+  <div class="field"><label>Lunch</label><input type="text" id="d-lunch" placeholder="Typical lunch..." value="${d.lunch||''}"></div>
+  <div class="field"><label>Dinner</label><input type="text" id="d-dinner" placeholder="Typical dinner..." value="${d.dinner||''}"></div>
+  <div class="field"><label>Junk Food Frequency</label><select id="d-junk"><option ${d.junkFood==='Never'?'selected':''}>Never</option><option ${d.junkFood==='Rarely'?'selected':'selected'}>Rarely</option><option ${d.junkFood==='Weekly'?'selected':''}>Weekly</option><option ${d.junkFood==='Daily'?'selected':''}>Daily</option></select></div>
+  <div class="divider"></div>
+  <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Habits</div>
+  <div style="display:flex;gap:8px;flex-direction:column">
+    <label style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--danger-dim);border-radius:var(--r-sm);cursor:pointer">
+      <input type="checkbox" id="d-tobacco" ${d.tobacco?'checked':''} style="width:16px;height:16px;accent-color:var(--danger)">
+      <span style="font-size:13px;font-weight:600;color:var(--danger)">🚬 Tobacco use</span>
+    </label>
+    <label style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--danger-dim);border-radius:var(--r-sm);cursor:pointer">
+      <input type="checkbox" id="d-alcohol" ${d.alcohol?'checked':''} style="width:16px;height:16px;accent-color:var(--danger)">
+      <span style="font-size:13px;font-weight:600;color:var(--danger)">🍺 Alcohol use</span>
+    </label>
+    <label style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--danger-dim);border-radius:var(--r-sm);cursor:pointer">
+      <input type="checkbox" id="d-smoking" ${d.smoking?'checked':''} style="width:16px;height:16px;accent-color:var(--danger)">
+      <span style="font-size:13px;font-weight:600;color:var(--danger)">💨 Smoking</span>
+    </label>
+  </div>
+  <div class="field" style="margin-top:16px"><label>Dietary Notes</label><textarea id="d-notes" placeholder="Any special dietary practices...">${d.notes||''}</textarea></div>`;
+}
+
+function initDietStep() {}
+
+function collectDiet() {
+  formData.diet = {
+    type: document.getElementById('d-type')?.value||'',
+    meals: document.getElementById('d-meals')?.value||'',
+    water: document.getElementById('d-water')?.value||'',
+    breakfast: document.getElementById('d-bfast')?.value||'',
+    lunch: document.getElementById('d-lunch')?.value||'',
+    dinner: document.getElementById('d-dinner')?.value||'',
+    junkFood: document.getElementById('d-junk')?.value||'',
+    tobacco: document.getElementById('d-tobacco')?.checked||false,
+    alcohol: document.getElementById('d-alcohol')?.checked||false,
+    smoking: document.getElementById('d-smoking')?.checked||false,
+    notes: document.getElementById('d-notes')?.value||''
+  };
+}
+
+// ===== STEP 5: DRUGS =====
+let drugs = [];
+function renderDrugsStep() {
+  drugs = formData.drugs?.list || [];
+  return `<div class="section-hd"><div class="section-hd-icon">💊</div><div><h3>Medications</h3><p>Current drugs and compliance</p></div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <span style="font-size:13px;font-weight:700;color:var(--text)">Drug List</span>
+    <button class="btn btn-secondary btn-sm" onclick="addDrug()">+ Add Drug</button>
+  </div>
+  <div id="drugs-list"></div>
+  <div class="field"><label>Drug Allergies</label><input type="text" id="dr-allergy" placeholder="Known drug allergies..." value="${formData.drugs?.allergies||''}"></div>
+  <div class="field"><label>Medication Compliance</label><select id="dr-compliance"><option ${formData.drugs?.compliance==='Good'?'selected':''}>Good</option><option ${formData.drugs?.compliance==='Partial'?'selected':''}>Partial</option><option ${formData.drugs?.compliance==='Poor'?'selected':''}>Poor</option><option ${formData.drugs?.compliance==='Not applicable'?'selected':'selected'}>Not applicable</option></select></div>`;
+}
+
+function initDrugsStep() { renderDrugsList(); }
+
+function renderDrugsList() {
+  const list = document.getElementById('drugs-list');
+  if (!list) return;
+  if (drugs.length === 0) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--text3);text-align:center;padding:12px">No drugs added</p>';
+    return;
+  }
+  list.innerHTML = drugs.map((d,i) => `
+    <div class="drug-row">
+      <button class="remove-btn" onclick="removeDrug(${i})">✕</button>
+      <div class="drug-fields">
+        <div class="field" style="grid-column:1/-1"><label>Drug Name</label><input type="text" value="${d.name||''}" onchange="updateDrug(${i},'name',this.value)" placeholder="Drug name"></div>
+        <div class="field"><label>Dose</label><input type="text" value="${d.dose||''}" onchange="updateDrug(${i},'dose',this.value)" placeholder="e.g. 500mg"></div>
+        <div class="field"><label>Frequency</label><select onchange="updateDrug(${i},'freq',this.value)"><option ${d.freq==='OD'?'selected':''}>OD</option><option ${d.freq==='BD'?'selected':''}>BD</option><option ${d.freq==='TDS'?'selected':''}>TDS</option><option ${d.freq==='QID'?'selected':''}>QID</option><option ${d.freq==='SOS'?'selected':''}>SOS</option></select></div>
+        <div class="field"><label>Route</label><select onchange="updateDrug(${i},'route',this.value)"><option ${d.route==='Oral'?'selected':''}>Oral</option><option ${d.route==='IV'?'selected':''}>IV</option><option ${d.route==='IM'?'selected':''}>IM</option><option ${d.route==='Topical'?'selected':''}>Topical</option><option ${d.route==='Inhalation'?'selected':''}>Inhalation</option></select></div>
+        <div class="field" style="grid-column:1/-1"><label>Since When</label><input type="text" value="${d.since||''}" onchange="updateDrug(${i},'since',this.value)" placeholder="e.g. 2 months"></div>
+      </div>
+    </div>`).join('');
+}
+
+function addDrug() { drugs.push({name:'',dose:'',freq:'OD',route:'Oral',since:''}); renderDrugsList(); }
+function removeDrug(i) { drugs.splice(i,1); renderDrugsList(); }
+function updateDrug(i,k,v) { if(drugs[i]) drugs[i][k]=v; }
+
+function collectDrugs() {
+  formData.drugs = {
+    list: drugs,
+    allergies: document.getElementById('dr-allergy')?.value||'',
+    compliance: document.getElementById('dr-compliance')?.value||''
+  };
+}
+
+// ===== STEP 6: HEALTH EDUCATION =====
+const HEALTH_TOPICS = ['Hand Hygiene','Nutrition & Diet','Immunization','Family Planning','Malaria Prevention','TB Awareness','Diabetes Management','BP Control','Maternal Care','Child Health','Water Purification','Wound Care','First Aid','Personal Hygiene'];
+let selectedTopics = [];
+
+function renderHealthEduStep() {
+  selectedTopics = formData.healthEdu?.topics || [];
+  return `<div class="section-hd"><div class="section-hd-icon">📚</div><div><h3>Health Education</h3><p>Topics covered during visit</p></div></div>
+  <div class="field"><label>Topics Covered</label>
+    <div class="topic-grid" id="topics-grid">
+      ${HEALTH_TOPICS.map(t => `<div class="topic-btn ${selectedTopics.includes(t)?'active':''}" onclick="toggleTopic(this,'${t}')">${t}</div>`).join('')}
+    </div>
+  </div>
+  <div class="field"><label>Custom Topic</label><input type="text" id="edu-custom" placeholder="Other topic discussed..." value="${formData.healthEdu?.customTopic||''}"></div>
+  <div class="field"><label>Materials Given</label><input type="text" id="edu-material" placeholder="Pamphlets, booklets, etc." value="${formData.healthEdu?.materials||''}"></div>
+  <div class="field"><label>Patient / Family Response</label><select id="edu-response"><option ${formData.healthEdu?.response==='Very Receptive'?'selected':''}>Very Receptive</option><option ${formData.healthEdu?.response==='Receptive'?'selected':'selected'}>Receptive</option><option ${formData.healthEdu?.response==='Neutral'?'selected':''}>Neutral</option><option ${formData.healthEdu?.response==='Uninterested'?'selected':''}>Uninterested</option></select></div>
+  <div class="field"><label>Follow-up Date</label><input type="date" id="edu-followup" value="${formData.healthEdu?.followup||''}"></div>
+  <div class="field"><label>Additional Notes</label><textarea id="edu-notes" placeholder="Any other observations...">${formData.healthEdu?.notes||''}</textarea></div>`;
+}
+
+function initHealthEduStep() {}
+
+function toggleTopic(el, topic) {
+  el.classList.toggle('active');
+  if (el.classList.contains('active')) { if (!selectedTopics.includes(topic)) selectedTopics.push(topic); }
+  else { selectedTopics = selectedTopics.filter(t => t !== topic); }
+}
+
+function collectHealthEdu() {
+  formData.healthEdu = {
+    topics: selectedTopics,
+    customTopic: document.getElementById('edu-custom')?.value||'',
+    materials: document.getElementById('edu-material')?.value||'',
+    response: document.getElementById('edu-response')?.value||'',
+    followup: document.getElementById('edu-followup')?.value||'',
+    notes: document.getElementById('edu-notes')?.value||''
+  };
+}
+
+// ===== SUBMIT FORM =====
+async function submitForm() {
+  collectCurrentStep();
+  const btn = document.getElementById('next-btn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  const payload = {
+    ...formData,
+    collectedBy: currentUser.name,
+    collectedByRoll: currentUser.rollNumber || '',
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  try {
+    if (editingRecordId) {
+      await db.collection('hearth_records').doc(editingRecordId).update(payload);
+      logActivity('Record Edited', 'Family: ' + (formData.family?.headName || 'Unknown'));
+    } else {
+      payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('hearth_records').add(payload);
+      logActivity('Record Created', 'Family: ' + (formData.family?.headName || 'Unknown'));
+    }
+    showScreen('dashboard'); loadDashboard();
+  } catch(e) {
+    alert('Error saving: ' + e.message);
+    btn.textContent = '✓ Submit'; btn.disabled = false;
+  }
+}
+
+// ===== RECORD VIEW =====
+async function viewRecord(id) {
+  logActivity('Record Viewed', 'ID: ' + id);
+  const record = allRecords.find(r => r.id === id);
+  if (!record) return;
+  currentRecord = record;
+  document.getElementById('rv-title').textContent = record.family?.headName || 'Family Record';
+  document.getElementById('rv-delete-btn').style.display = currentUser?.role === 'admin' ? 'block' : 'none';
+
+  const cs = record.consent?.status;
+  const bannerStyle = cs==='comfortable' ? 'background:var(--success-dim);color:var(--success)' : cs==='hesitant' ? 'background:var(--warning-dim);color:var(--warning)' : cs==='refused' ? 'background:var(--danger-dim);color:var(--danger)' : 'background:var(--accent-dim);color:var(--accent)';
+  const bannerIcon = cs==='comfortable'?'✓':cs==='hesitant'?'⚠':cs==='refused'?'✗':'•';
+  const bannerTxt = cs==='comfortable'?'Family Consented':cs==='hesitant'?'Family Hesitant':cs==='refused'?'Family Refused':'Consent Pending';
+
+  const v = record.vitals || {};
+  const f = record.family || {};
+  const h = record.history || {};
+  const d = record.diet || {};
+  const dr = record.drugs || {};
+  const e = record.healthEdu || {};
+
+  document.getElementById('record-view-body').innerHTML = `
+    <div class="card">
+      <div class="consent-banner" style="${bannerStyle}">${bannerIcon} ${bannerTxt} ${record.consent?.givenBy ? '· ' + record.consent.givenBy : ''}</div>
+      <div style="font-size:11px;color:var(--text2)">Collected by <strong style="color:var(--text)">${record.collectedBy||'—'}</strong> on ${fmtDate(record.createdAt)}</div>
+    </div>
+    <div class="card">
+      <div class="rv-section">
+        <h4>🏠 Family</h4>
+        ${rv('Head of Family', f.headName)} ${rv('Address', f.address)} ${rv('Ward', f.ward)} ${rv('Total Members', f.totalMembers)} ${rv('Contact', f.contact||'—')}
+        ${f.members?.length ? `<div class="rv-full"><div class="rv-label">Members</div><div class="rv-val">${f.members.map(m=>`${m.name||'?'} (${m.age||'?'}y, ${m.gender||''}, ${m.relation||''})`).join('<br>')}</div></div>` : ''}
+      </div>
+    </div>
+    <div class="card">
+      <div class="rv-section">
+        <h4>🩺 Vitals</h4>
+        ${rv('Blood Pressure', v.bpSystolic && v.bpDiastolic ? v.bpSystolic+'/'+v.bpDiastolic+' mmHg' : '—')}
+        ${rv('Pulse', v.pulse ? v.pulse+' bpm' : '—')} ${rv('Temperature', v.temperature ? v.temperature+'°F' : '—')}
+        ${rv('Weight', v.weight ? v.weight+' kg' : '—')} ${rv('Height', v.height ? v.height+' cm' : '—')}
+        ${rv('BMI', v.bmi ? v.bmi+' ('+getBMIClass(v.bmi)+')' : '—')}
+        ${rv('SpO₂', v.spO2 ? v.spO2+'%' : '—')} ${rv('Resp. Rate', v.respRate ? v.respRate+'/min' : '—')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="rv-section">
+        <h4>📋 Medical History</h4>
+        ${rvFull('Chief Complaint', h.chiefComplaint)} ${rv('Duration', h.duration)} ${rv('Onset', h.onset)}
+        ${rvFull('Aggravating', h.aggravating)} ${rvFull('Relieving', h.relieving)}
+        ${rvFull('Associated Symptoms', h.associated)} ${rvFull('Previous Treatment', h.previousTreatment)}
+        ${rv('Past Illnesses', h.pastIllnesses?.join(', ')||'—')} ${rv('Allergies', h.allergies||'—')}
+        ${rv('Family History', h.familyHistory?.join(', ')||'—')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="rv-section">
+        <h4>🥗 Diet & Habits</h4>
+        ${rv('Diet Type', d.type)} ${rv('Meals/Day', d.meals)} ${rv('Water Intake', d.water)}
+        ${rv('Breakfast', d.breakfast||'—')} ${rv('Lunch', d.lunch||'—')} ${rv('Dinner', d.dinner||'—')}
+        ${rv('Junk Food', d.junkFood)}
+        ${rv('Habits', [d.tobacco?'Tobacco':'', d.alcohol?'Alcohol':'', d.smoking?'Smoking':''].filter(Boolean).join(', ')||'None')}
+      </div>
+    </div>
+    ${dr.list?.length ? `<div class="card"><div class="rv-section"><h4>💊 Medications</h4>${dr.list.map(drug=>`<div class="rv-full"><div class="rv-val">${drug.name} — ${drug.dose} ${drug.freq} ${drug.route} (${drug.since})</div></div>`).join('')}${rv('Compliance', dr.compliance)}</div></div>` : ''}
+    <div class="card">
+      <div class="rv-section">
+        <h4>📚 Health Education</h4>
+        ${rv('Topics', e.topics?.join(', ')||'—')} ${rv('Materials', e.materials||'—')} ${rv('Response', e.response||'—')} ${rv('Follow-up', e.followup||'—')}
+        ${rvFull('Notes', e.notes)}
+      </div>
+    </div>`;
+
+  showScreen('record');
+  updateWatermarks();
+}
+
+function rv(label, val) {
+  return `<div class="rv-row"><span class="rv-label">${label}</span><span class="rv-val">${val||'—'}</span></div>`;
+}
+function rvFull(label, val) {
+  if (!val) return '';
+  return `<div class="rv-full"><div class="rv-label">${label}</div><div class="rv-val">${val}</div></div>`;
+}
+
+async function deleteCurrentRecord() {
+  if (!currentRecord) return;
+  if (!confirm('Delete this record permanently?')) return;
+  try {
+    await db.collection('hearth_records').doc(currentRecord.id).delete();
+    logActivity('Record Deleted', 'Family: ' + (currentRecord.family?.headName||'Unknown'));
+    showScreen('dashboard'); loadDashboard();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+// ===== ADMIN PANEL =====
+async function showAdminPanel() {
+  showScreen('admin');
+  updateWatermarks();
+  loadAdminUsers();
+}
+
+async function loadAdminUsers() {
+  const content = document.getElementById('admin-users-content');
+  content.innerHTML = '<p style="color:var(--text3);font-size:13px;padding:20px;text-align:center">Loading...</p>';
+  try {
+    const snap = await db.collection('hearth_users').orderBy('createdAt','desc').get();
+    if (snap.empty) { content.innerHTML = '<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No students yet</div></div>'; return; }
+    content.innerHTML = snap.docs.map(d => {
+      const u = d.data();
+      return `<div class="user-item">
+        <div class="user-avatar">${(u.name||'?')[0].toUpperCase()}</div>
+        <div class="user-info">
+          <div class="user-name">${u.name||'—'}</div>
+          <div class="user-meta">Roll: ${u.rollNumber||'—'} · Registered: ${fmtDate(u.createdAt)}</div>
+          <div class="user-meta">Last login: ${fmtDate(u.lastLogin)}</div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="removeUser('${d.id}','${u.name}')">Remove</button>
+      </div>`;
+    }).join('');
+  } catch(e) { content.innerHTML = '<p style="color:var(--danger);font-size:12px;padding:12px">Error: ' + e.message + '</p>'; }
+}
+
+async function loadAdminLog() {
+  const content = document.getElementById('admin-log-content');
+  content.innerHTML = '<p style="color:var(--text3);font-size:13px;padding:20px;text-align:center">Loading...</p>';
+  try {
+    const snap = await db.collection('hearth_activity').orderBy('timestamp','desc').limit(100).get();
+    if (snap.empty) { content.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No activity yet</div></div>'; return; }
+    content.innerHTML = '<div class="card">' + snap.docs.map(d => {
+      const l = d.data();
+      return `<div class="log-item">
+        <div class="log-dot"></div>
+        <div class="log-content">
+          <div class="log-action">${l.action} — <span style="color:var(--text2)">${l.userName||'?'}</span></div>
+          <div class="log-meta">${l.details||''} · ${l.timestamp ? new Date(l.timestamp.toDate()).toLocaleString('en-IN') : '—'}</div>
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+  } catch(e) { content.innerHTML = '<p style="color:var(--danger);font-size:12px;padding:12px">Error: ' + e.message + '</p>'; }
+}
+
+function switchAdminTab(tab) {
+  document.getElementById('atab-users').classList.toggle('active', tab === 'users');
+  document.getElementById('atab-log').classList.toggle('active', tab === 'log');
+  document.getElementById('admin-users-content').style.display = tab === 'users' ? 'block' : 'none';
+  document.getElementById('admin-log-content').style.display = tab === 'log' ? 'block' : 'none';
+  if (tab === 'log') loadAdminLog();
+}
+
+async function removeUser(id, name) {
+  if (!confirm('Remove ' + name + '? They will not be able to login.')) return;
+  try {
+    await db.collection('hearth_users').doc(id).delete();
+    logActivity('User Removed', 'Removed: ' + name);
+    loadAdminUsers();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+// ===== START =====
+window.addEventListener('load', init);
+setInterval(updateWatermarks, 60000);
+</script>
+</body>
+</html>
